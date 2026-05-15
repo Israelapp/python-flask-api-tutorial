@@ -3,8 +3,6 @@ app = Flask(__name__)
 
 todos = [ { "label": "My first task", "done": False } ]
 
-todos = [ { "label": "My first task", "done": False } ]
-
 @app.route('/todos', methods=['GET'])
 def hello_world():
     return jsonify(todos)
@@ -12,9 +10,17 @@ def hello_world():
 @app.route('/todos', methods=['POST'])
 def add_new_todo():
     request_body = request.json
-    request.get_json(force=True)
     print("Incoming request with the following body", request_body)
-    return 'Response for the POST todo'
+    todos.append(request_body)
+    return jsonify(todos)
+
+@app.route('/todos/<int:position>', methods=['DELETE'])
+def delete_todo(position):
+    print("This is the position to delete:", position)
+    
+    todos.pop(position)
+    
+    return jsonify(todos)
 
 
 # These two lines should always be at the end of your app.py file
